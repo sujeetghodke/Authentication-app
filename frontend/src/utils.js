@@ -8,6 +8,6 @@ export const handleSuccess = (msg) => {
 
 export const handleError = (msg) => {
   toast.error(msg, {
-    position: "bottom-right",
+    position: "top-right",
   });
 };

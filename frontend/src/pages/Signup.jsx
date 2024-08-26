@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import { handleError } from "../utils";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { handleError, handleSuccess } from "../utils";
 
 function Signup() {
   const [signupInfo, setSignupInfo] = useState({
@@ -11,20 +12,20 @@ function Signup() {
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // console.log(name, value);
+    console.log(name, value);
     const copySignupInfo = { ...signupInfo };
     copySignupInfo[name] = value;
     setSignupInfo(copySignupInfo);
   };
-  // console.log("SignupInfo -> ", signupInfo);
+  console.log("SignupInfo -> ", signupInfo);
 
   const navigate = useNavigate();
   const handleSignup = async (e) => {
     e.preventDefault();
     const { name, email, password } = signupInfo;
     if (!name || !email || !password) {
-      // return handleError("All fields are  required");
-      return alert("All fields are  required");
+      return handleError("All fields are  required");
+      // return alert("All fields are  required");
     }
     try {
       const url = "http://localhost:8080/auth/signup";
@@ -35,13 +36,13 @@ function Signup() {
         },
         body: JSON.stringify(signupInfo),
       });
-      const result = await response.JSON();
+      const result = await response.json();
       const { success, message, error } = result;
       if (success) {
-        alert("Signup successfully :)");
+        handleSuccess(message);
         setTimeout(() => {
           navigate("/login");
-        }, 1000);
+        }, 3000);
       } else if (error) {
         const details = error?.details[0].message;
         handleError(details);
